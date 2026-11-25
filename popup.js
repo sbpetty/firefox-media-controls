@@ -33,10 +33,23 @@ async function findMedia() {
             
         const media = results[0].result ?? [];
 
+        const mediaList = document.querySelector("#media-list");
+
         if (media.length === 0) {
             status.textContent = "No media found.";
         } else {
             status.textContent = `Found ${media.length} media element(s).`;
+
+            media.forEach((item, index) => {
+                const listItem = document.createElement("li");
+
+                const state = item.paused ? "paused" : "playing";
+
+                listItem.textContent =
+                    `${index + 1}: ${item.type}, ${state}`;
+
+                mediaList.appendChild(listItem);
+            });
         }
     } catch (error) {
         console.error(error);
