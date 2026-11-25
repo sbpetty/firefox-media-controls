@@ -8,20 +8,30 @@ async function findMedia() {
         });
 
         const currentTab = tabs[0];
-
-        await browser.scripting.executeScript({
+        
+        const results = await browser.scripting.executeScript({
             target: {
                 tabId: currentTab.id
             },
-            files: ["content.js"]
-        });
+            
+            func: () => {
+                const mediaElements = Array.from(
+                    document.querySelectorAll("video, audio")
+                );
 
-        const media = await browser.tabs.sendMessage(
-            currentTab.id,
-            {
-                type: "find-media"
+                return mediaElements.map((media, index) => {
+                    return {
+                        id: index,
+                        type: media.tagName.toLowerCase(),
+                        paused: media.paused,
+                        currentTime: media.currentTime,
+                        duration: media.duration
+                    };
+                });
             }
-        );
+        });
+            
+        const media = results[0].result ?? [];
 
         if (media.length === 0) {
             status.textContent = "No media found.";
@@ -30,7 +40,7 @@ async function findMedia() {
         }
     } catch (error) {
         console.error(error);
-        status.textContent = "Could not access this page.";
+        status.textContent = "This page cannot be controlled.";
     }
 }
 
