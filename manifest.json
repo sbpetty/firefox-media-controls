@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Media Controls",
+    "version": "1.0",
+    "description": "Control media playing in the current Firefox tab.",
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "action": {
+        "default_title": "Media Controls",
+        "default_popup": "popup.html"
+    }
+}
